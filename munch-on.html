@@ -1,0 +1,76 @@
+<html>
+<head>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="md5.js"></script>
+</head>
+<body>
+<pre class="result">result goes here</pre>
+<script type="text/javascript">
+var url = "http://data.austintexas.gov/resource/ecmv-9xxi.json?$q=mcdonalds&$select=restaurant_name,score,address,inspection_date";
+
+$.get(url, function(data) {
+  var much_nicer_data = munch_on(data);
+  $('.result').text(JSON.stringify(much_nicer_data, null, 4));
+});
+
+function munch_on(data) {
+  var results = {};
+  data.forEach(function(entry) {
+    var a = cleanup_result(entry);
+    var id = a.location.id;
+    if (! results[id]) {
+      results[id] = {
+        location : a.location,
+        inspections : [],
+      };
+    }
+    results[id].inspections.push(a.inspection);
+  });
+  return results;
+}
+
+// Source Data format:
+// {
+//   "inspection_date": 1334300400,
+//   "address": {
+//     "needs_recoding": false,
+//     "longitude": "-97.96084999962761",
+//     "latitude": "30.315940000131093",
+//     "human_address": "{\"address\":\"12514 W SH 71\",\"city\":\"BEE CAVE\",\"state\":\"TX\",\"zip\":\"78738\"}"
+//   },
+//   "score": "84",
+//   "restaurant_name": "BC - McDonald's #8056"
+// },
+
+function cleanup_result(entry) {
+  var id = md5(entry.restaurant_name + "|" + entry.address.human_address);
+  parsed_address = JSON.parse(entry.address.human_address);
+  return {
+    location : {
+      id : id,
+      name : entry.restaurant_name,
+      address : parsed_address.address,
+      city : parsed_address.city.toLowerCase().capitalizeWords(),
+      state : parsed_address.state,
+      zip : parsed_address.zip,
+      latitude : entry.address.latitude,
+      longitude: entry.address.longitude,
+    },
+    inspection : {
+      date : new Date(entry.inspection_date*1000),
+      score : entry.score
+    }
+  };
+}
+
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+String.prototype.capitalizeWords = function() {
+  return this.split(/\s+/).map(function(w) {return w.capitalize();}).join(' ');
+}
+
+</script>
+</body>
+</html>
