@@ -106,7 +106,7 @@
             </td>
             <td>
               <div class="score" data-bind="foreach: scores">
-                <span data-bind="text:score"></span>&nbsp;
+                <a href="#" data-bind="text:score, attr: {title: inspection_date}"></a>&nbsp;
               </div>
             </td>
           </tr>

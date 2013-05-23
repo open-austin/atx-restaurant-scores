@@ -42,6 +42,9 @@ amplify.subscribe( "request.success", function(settings, data) {
 
         data.length = 0;
         for (var key in result) {
+            result[key].scores.sort(function(a,b) {
+                return a.inspection_date - b.inspection_date;
+            });
             data.push(result[key]);
         }
 
