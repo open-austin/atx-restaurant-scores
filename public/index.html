@@ -109,19 +109,19 @@
            <tr>
             <th>Location</th>
             <th>Address</th>
-            <th>Score</th>
+            <th>Scores</th>
           </tr>
           <!-- ko foreach: results -->
           <tr>
             <td>
-              <div class="restaurant_name" data-bind="text: restaurant_name"></div>
+              <div class="restaurant_name" data-bind="text: location.name"></div>
             </td>
             <td>
-              <div class="address" data-bind="text: address.human_address.address"></div>
+              <div class="address"><abbr data-bind="text: location.full_address"></abbr></div>
             </td>
             <td>
-              <div class="score" data-bind="foreach: scores">
-                <abbr href="#" data-bind="text:score, attr: {title: inspection_date}"></abbr>&nbsp;
+              <div class="score" data-bind="foreach: $data.inspections">
+                <abbr data-bind="text:score, attr: {title: date.toDateString()}"></abbr>&nbsp;
               </div>
             </td>
           </tr>
