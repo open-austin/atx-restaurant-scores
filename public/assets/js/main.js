@@ -14,7 +14,7 @@ function SearchModel(result_model) {
             // '$where': range(30.23523613576623,-97.69688384739476, 10000),
             '$q': self.search_value()
         }, function(data) {
-            console.log(data);
+            // console.log(data);
             result_model.results(data);
             // $("#status").text('Search finished.');
 

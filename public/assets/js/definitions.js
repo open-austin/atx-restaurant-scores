@@ -21,36 +21,48 @@ amplify.subscribe( "request.success", function(settings, data) {
 
     // Ugly solution.
     if(data instanceof Array) {
-        var result = {};
 
-        data.forEach(function(item) {
-            item.id = item.address.human_address.hashCode();
-            item.address.human_address = JSON.parse(item.address.human_address);
-            item.scores = [{
-                'inspection_date': new Date(item.inspection_date*1000),
-                'score': parseInt(item.score)
-            }]
+        var locations = {};
+        data.forEach(function(entry) {
+            var id = (entry.restaurant_name + entry.address.human_address).hashCode();
 
-            delete item.inspection_date;
-            delete item.score;
+            if (typeof locations[id] === 'undefined') {
+		var a = JSON.parse(entry.address.human_address);
+                a.address = cleanupStreetAddress(a.address);
+                a.city = cleanupCity(a.city);
+                locations[id] = {
+		  'location' : {
+		      'id' : id,
+		      'name' : entry.restaurant_name,
+		      'address' : a.address,
+		      'city' : a.city,
+		      'state' : a.state,
+		      'zip' : a.zip,
+		      'full_address' : a.address + ", " + a.city + ", " + a.state + " " + a.zip,
+		      'latitude' : entry.address.latitude,
+		      'longitude' : entry.address.longitude
+		  },
+		  'inspections' : []
+		}
+	    }
 
-            if(typeof result[item.id] === 'undefined')
-                result[item.id] = item;
-            else
-                result[item.id].scores = result[item.id].scores.concat(item.scores)
+            locations[id].inspections.push({
+                'date': new Date(entry.inspection_date*1000),
+                'score': parseInt(entry.score)
+            });
         });
 
         data.length = 0;
-        for (var key in result) {
-            result[key].scores.sort(function(a,b) {
-                return a.inspection_date - b.inspection_date;
+        for (var id in locations) {
+            locations[id].inspections.sort(function(a, b) {
+                return b.date - a.date;
             });
-            data.push(result[key]);
+            data.push(locations[id]);
         }
 
         data.sort(function(a,b) {
-            if(a.restaurant_name > b.restaurant_name) return 1;
-            if(a.restaurant_name == b.restaurant_name) return 0;
+            if (a.location.name > b.location.name) return 1;
+            if (a.location.name == b.location.name) return 0;
             return -1;
         });
         
@@ -67,4 +79,20 @@ amplify.request.define( "query", "ajax", {
 
 function range(long, lat, range) {
     return 'within_circle(' + ['address', long, lat, range].join(',') + ')'
+}
+
+function cleanupStreetAddress(s) {
+    return s.toLowerCase().capitalizeWords();
+}
+
+function cleanupCity(s) {
+    return s.toLowerCase().capitalizeWords();
+}
+
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+String.prototype.capitalizeWords = function() {
+  return this.split(/\s+/).map(function(w) {return w.capitalize();}).join(' ');
 }

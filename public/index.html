@@ -6,21 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Austin, Texas, Restaurant Scores.">
   <meta name="author" content="Open Austin">
-  <script type="text/javascript" src="assets/amplify/lib/jquery.js"></script>
-  <script type="text/javascript" src="assets/amplify/lib/amplify-1.1.0/amplify.js"></script>
-  <script type="text/javascript" src="assets/amplify/lib/knockout-2.2.1.js"></script>
-  <script type="text/javascript" src="http://underscorejs.org/underscore.js"></script>
+  <script type="text/javascript" src="assets/js/lib/jquery-2.0.1.min.js?2013052401"></script>
+  <script type="text/javascript" src="assets/js/lib/amplify.min.js?2013052401"></script>
+  <script type="text/javascript" src="assets/js/lib/knockout-2.2.1.js?2013052401"></script>
+  <script type="text/javascript" src="assets/js/lib/underscore-min.js?2013052401"></script>
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="assets/js/bootstrap/html5shiv.js"></script>
   <![endif]-->
 
-  <script type="text/javascript" src="assets/js/bootstrap/bootstrap.min.js"></script>
-  <script type="text/javascript" src="assets/js/definitions.js"></script>
-  <script type="text/javascript" src="assets/js/main.js"></script>
+  <script type="text/javascript" src="assets/js/bootstrap/bootstrap.min.js?2013052401"></script>
+  <script type="text/javascript" src="assets/js/definitions.js?2013052401"></script>
+  <script type="text/javascript" src="assets/js/main.js?2013052401"></script>
  
-  <link href="assets/css/bootstrap.css" rel="stylesheet">
+  <link href="assets/css/bootstrap.css?2013052401" rel="stylesheet">
   <style type="text/css">
     body {
       padding-top: 60px;
@@ -45,17 +45,16 @@
       text-align: center;
     }
     #loading {
-	    text-align: center;   
-    	display: block;
-	    visibility: hidden; 
-    	display:none;
+      text-align: center;   
+      visibility: hidden; 
+      display: none;
     }
     #search_result {
-	    visibility: hidden; 
-    	display:none;
+      visibility: hidden; 
+      display: none;
     }
   </style>
-  <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+  <link href="assets/css/bootstrap-responsive.css?2013052401" rel="stylesheet">
 </head>
 
 <body>
@@ -107,19 +106,19 @@
            <tr>
             <th>Location</th>
             <th>Address</th>
-            <th>Score</th>
+            <th>Scores</th>
           </tr>
           <!-- ko foreach: results -->
           <tr>
             <td>
-              <div class="restaurant_name" data-bind="text: restaurant_name"></div>
+              <div class="restaurant_name" data-bind="text: location.name"></div>
             </td>
             <td>
-              <div class="address" data-bind="text: address.human_address.address"></div>
+              <div class="address"><abbr data-bind="text: location.full_address"></abbr></div>
             </td>
             <td>
-              <div class="score" data-bind="foreach: scores">
-                <a href="#" data-bind="text:score, attr: {title: inspection_date}"></a>&nbsp;
+              <div class="score" data-bind="foreach: $data.inspections">
+                <abbr data-bind="text:score, attr: {title: date.toDateString()}"></abbr>&nbsp;
               </div>
             </td>
           </tr>
