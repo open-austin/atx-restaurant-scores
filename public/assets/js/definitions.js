@@ -46,9 +46,11 @@ amplify.subscribe( "request.success", function(settings, data) {
 		}
 	    }
 
+            var score = parseInt(entry.score);
             locations[id].inspections.push({
                 'date': new Date(entry.inspection_date*1000),
-                'score': parseInt(entry.score)
+                'score': score,
+                'result' : (score > 70 ? 'pass' : 'fail')
             });
         });
 

@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>atx Scores - Austin Restaurant Scores</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Austin, Texas, Restaurant Scores.">
-  <meta name="author" content="Open Austin">
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Austin, Texas, Restaurant Scores." />
+  <meta name="author" content="Open Austin" />
+  <script type="text/javascript" src="assets/js/lib/jquery-1.10.0.min.js?2013052401"></script>
   <script type="text/javascript" src="assets/js/lib/amplify.min.js?2013052401"></script>
   <script type="text/javascript" src="assets/js/lib/knockout-2.2.1.js?2013052401"></script>
   <script type="text/javascript" src="assets/js/lib/underscore-min.js?2013052401"></script>
+  <script type="text/javascript" src="assets/js/lib/date.format.js?2013052401"></script>
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -20,7 +21,7 @@
   <script type="text/javascript" src="assets/js/definitions.js?2013052401"></script>
   <script type="text/javascript" src="assets/js/main.js?2013052401"></script>
  
-  <link href="assets/css/bootstrap.css?2013052401" rel="stylesheet">
+  <link href="assets/css/bootstrap.css?2013052401" rel="stylesheet" />
   <style type="text/css">
     body {
       padding-top: 60px;
@@ -44,6 +45,11 @@
       margin-right: auto;
       text-align: center;
     }
+    .tip {
+      font-size: 90%;
+      line-height: 110%;
+      color: #888;
+    }
     #loading {
       text-align: center;   
       visibility: hidden; 
@@ -53,8 +59,27 @@
       visibility: hidden; 
       display: none;
     }
+    .scores .score {
+      display: block;
+      float: left;
+      margin-right: 0.5em;
+      text-align: center;
+      line-height: 100%;
+      border: solid #d8d8d8 1px;
+      border-radius: 3px;
+      padding: 3px;
+      min-width: 3em;
+    }
+    .scores .score .value {
+      font-size: 110%;
+    }
+    .scores .score .date {
+      font-size: 75%;
+    }
+    .scores .pass {background: #CEF0C6;}
+    .scores .fail {background: #F0C9C6;}
   </style>
-  <link href="assets/css/bootstrap-responsive.css?2013052401" rel="stylesheet">
+  <link href="assets/css/bootstrap-responsive.css?2013052401" rel="stylesheet" />
 </head>
 
 <body>
@@ -86,10 +111,17 @@
         <form id="search_form" class="form" data-bind="submit: do_search">
           <p>
             <input data-bind="value: search_value" type="text" id="search_box" placeholder="Search" class="input-xxlarge search-query" />
+	  </p>
+	  <p>
+            <button class="btn btn-primary" type="submit">Search</button>
           </p>
-          <p>
-            <button class="btn btn-large btn-primary" type="submit">Search</button>
-          </p>
+	  <p class="tip">
+	    Tip: You can search by restaurant name, street address, city, or zip.
+	    <br />
+	    Query <em>must</em> match exactly.
+	    <br />
+	    For example, "Anderson Lane" will not match "Anderson Ln". Try just "Anderson" instead.
+	  </p>
 
           <span id="loading"><p><img src="assets/img/loading.gif"></p></span>
 
@@ -110,15 +142,24 @@
           </tr>
           <!-- ko foreach: results -->
           <tr>
-            <td>
-              <div class="restaurant_name" data-bind="text: location.name"></div>
+            <td class="name">
+              <span data-bind="text: location.name"></span>
             </td>
-            <td>
-              <div class="address"><abbr data-bind="text: location.full_address"></abbr></div>
+            <td class="address">
+	      <span data-bind="text: location.address"></span>
+	      <br />
+	      <span data-bind="text: location.city"></span>, <span data-bind="text: location.state"></span> <span data-bind="text: location.zip"></span>
             </td>
-            <td>
-              <div class="score" data-bind="foreach: $data.inspections">
-                <abbr data-bind="text:score, attr: {title: date.toDateString()}"></abbr>&nbsp;
+            <td class="scores">
+              <div data-bind="foreach: $data.inspections">
+                <div class="score" data-bind="css: result">
+                  <span data-bind="text: score"></span>
+		  <div class="date">
+                  <span data-bind="text: date.format('mmm d')"></span>
+		  <br />
+                  <span data-bind="text: date.format('yyyy')"></span>
+		  </div>
+                </div>
               </div>
             </td>
           </tr>
