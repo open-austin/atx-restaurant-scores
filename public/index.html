@@ -59,7 +59,7 @@
       visibility: hidden; 
       display: none;
     }
-    .scores .score {
+    #search_result .scores .score {
       display: block;
       float: left;
       margin-right: 0.5em;
@@ -70,14 +70,14 @@
       padding: 3px;
       min-width: 3em;
     }
-    .scores .score .value {
+    #search_result .scores .pass {background: #CEF0C6;}
+    #search_result .scores .fail {background: #F0C9C6;}
+    #search_result .score .value {
       font-size: 110%;
     }
-    .scores .score .date {
+    #search_result .score .date {
       font-size: 75%;
     }
-    .scores .pass {background: #CEF0C6;}
-    .scores .fail {background: #F0C9C6;}
   </style>
   <link href="assets/css/bootstrap-responsive.css?2013052401" rel="stylesheet" />
 </head>
@@ -133,39 +133,43 @@
 
         <div id="search_running"><img src="assets/img/loading.gif"></div>
 
-        <table class="table table-striped" cellspacing="0" id="search_result">
+        <div id="search_result">
+        <table class="table table-striped" cellspacing="0">
+          <thead>
+            <tr>
+              <th class="name">Location</th>
+              <th class="address">Address</th>
+              <th class="scores">Scores</th>
+           </tr>
+          </thead>
           <tbody>
-           <tr>
-            <th>Location</th>
-            <th>Address</th>
-            <th>Scores</th>
-          </tr>
-          <!-- ko foreach: results -->
-          <tr>
-            <td class="name">
-              <span data-bind="text: location.name"></span>
-            </td>
-            <td class="address">
-	      <span data-bind="text: location.address"></span>
-	      <br />
-	      <span data-bind="text: location.city"></span>, <span data-bind="text: location.state"></span> <span data-bind="text: location.zip"></span>
-            </td>
-            <td class="scores">
-              <div data-bind="foreach: $data.inspections">
-                <div class="score" data-bind="css: result">
-                  <span data-bind="text: score"></span>
-		  <div class="date">
-                  <span data-bind="text: date.format('mmm d')"></span>
-		  <br />
-                  <span data-bind="text: date.format('yyyy')"></span>
-		  </div>
+            <!-- ko foreach: results -->
+            <tr>
+              <td class="name">
+                <span data-bind="text: location.name"></span>
+              </td>
+              <td class="address">
+                <span data-bind="text: location.address"></span>
+                <br />
+                <span data-bind="text: location.city"></span>, <span data-bind="text: location.state"></span> <span data-bind="text: location.zip"></span>
+              </td>
+              <td class="scores">
+                <div data-bind="foreach: $data.inspections">
+                  <div class="score" data-bind="css: result">
+                    <span data-bind="text: score"></span>
+                    <div class="date">
+                    <span data-bind="text: date.format('mmm d')"></span>
+                    <br />
+                    <span data-bind="text: date.format('yyyy')"></span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </td>
-          </tr>
-          <!-- /ko -->
+              </td>
+            </tr>
+            <!-- /ko -->
           </tbody>
         </table>
+        </div>
       </div>
 
     </div> <!-- /row -->
