@@ -12,6 +12,14 @@ String.prototype.hashCode = function(){
     return hash;
 };
 
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+String.prototype.capitalizeWords = function() {
+  return this.split(/\s+/).map(function(w) {return w.capitalize();}).join(' ');
+}
+
 amplify.subscribe( "request.before", function(settings) {
     if(typeof settings.data.resource === 'undefined')
         settings.data.resource = DEFAULT_RESOURCE;
@@ -28,17 +36,14 @@ amplify.subscribe( "request.success", function(settings, data) {
 
             if (typeof locations[id] === 'undefined') {
 		var a = JSON.parse(entry.address.human_address);
-                a.address = cleanupStreetAddress(a.address);
-                a.city = cleanupCity(a.city);
                 locations[id] = {
 		  'location' : {
 		      'id' : id,
 		      'name' : entry.restaurant_name,
-		      'address' : a.address,
-		      'city' : a.city,
+		      'address' : a.address.toLowerCase().capitalizeWords(),
+		      'city' : a.city.toLowerCase().capitalizeWords(),
 		      'state' : a.state,
 		      'zip' : a.zip,
-		      'full_address' : a.address + ", " + a.city + ", " + a.state + " " + a.zip,
 		      'latitude' : entry.address.latitude,
 		      'longitude' : entry.address.longitude
 		  },
@@ -79,22 +84,3 @@ amplify.request.define( "query", "ajax", {
     type: "GET"
 });
 
-function range(long, lat, range) {
-    return 'within_circle(' + ['address', long, lat, range].join(',') + ')'
-}
-
-function cleanupStreetAddress(s) {
-    return s.toLowerCase().capitalizeWords();
-}
-
-function cleanupCity(s) {
-    return s.toLowerCase().capitalizeWords();
-}
-
-String.prototype.capitalize = function() {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-}
-
-String.prototype.capitalizeWords = function() {
-  return this.split(/\s+/).map(function(w) {return w.capitalize();}).join(' ');
-}

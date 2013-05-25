@@ -50,7 +50,7 @@
       line-height: 110%;
       color: #888;
     }
-    #loading {
+    #search_running {
       text-align: center;   
       visibility: hidden; 
       display: none;
@@ -123,8 +123,6 @@
 	    For example, "Anderson Lane" will not match "Anderson Ln". Try just "Anderson" instead.
 	  </p>
 
-          <span id="loading"><p><img src="assets/img/loading.gif"></p></span>
-
         </form>
       </div>
     </div>
@@ -132,6 +130,8 @@
     <div class="row">
 
       <div class="span12">
+
+        <div id="search_running"><img src="assets/img/loading.gif"></div>
 
         <table class="table table-striped" cellspacing="0" id="search_result">
           <tbody>
