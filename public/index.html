@@ -62,22 +62,23 @@
     #search_result .scores .score {
       display: block;
       float: left;
-      margin-right: 0.5em;
       text-align: center;
       line-height: 100%;
+      min-width: 3em;
+      padding: 3px;
+      margin-right: 0.5em;
+      margin-bottom: 5px;
       border: solid #d8d8d8 1px;
       border-radius: 3px;
-      padding: 3px;
-      min-width: 3em;
+    }
+    #search_result td.scores {
+      /* normally 8px, margin-bottom for .score tile is 5px, so reduce 8px -> 3px */
+      padding-bottom: 3px;
     }
     #search_result .scores .pass {background: #CEF0C6;}
     #search_result .scores .fail {background: #F0C9C6;}
-    #search_result .score .value {
-      font-size: 110%;
-    }
-    #search_result .score .date {
-      font-size: 75%;
-    }
+    #search_result .score .value {font-size: 110%;}
+    #search_result .score .date {font-size: 75%;}
   </style>
   <link href="assets/css/bootstrap-responsive.css?2013052401" rel="stylesheet" />
 </head>
